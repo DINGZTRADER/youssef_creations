@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const ORIGIN = 'https://youseffcreationz-8dnzo8xl6-peter-wachas-projects-776b8503.vercel.app';
+const ORIGIN = 'https://youseffcreationz.vercel.app';
 const ALLOWED = new Set([
   'sky-linen-look.jpeg','monochrome-knit.jpeg','terracotta-set.jpeg','sand-quarterzip.jpeg',
   'neutral-daywear.jpeg','burgundy-set.jpeg','black-white.jpeg','patterned-knit.jpeg','amber-linen.jpeg',
@@ -23,7 +23,7 @@ export async function GET(request) {
     status: 200,
     headers: {
       'Content-Type': upstream.headers.get('content-type') || 'image/jpeg',
-      'Cache-Control': 'public, max-age=86400, s-maxage=604800, immutable'
+      'Cache-Control': 'public, max-age=86400, s-maxage=604800'
     }
   });
 }
