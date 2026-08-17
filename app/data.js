@@ -3,7 +3,7 @@ export const STORE = {
   whatsappDisplay: '0758 704 993',
   whatsappIntl: '256758704993',
   city: 'Kampala, Uganda',
-  imageOrigin: 'https://youseffcreationz-8dnzo8xl6-peter-wachas-projects-776b8503.vercel.app'
+  imageOrigin: ''
 };
 
 export const PRODUCTS = [
