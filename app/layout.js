@@ -1,4 +1,5 @@
 import './styles.css';
+import './logo-overrides.css';
 
 export const metadata = {
   title: 'YousefCreationz | Kampala Style',
