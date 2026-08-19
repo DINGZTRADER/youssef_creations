@@ -7,12 +7,13 @@ import { PRODUCTS, STORE } from '../data';
 
 const CLOUDINARY_CLOUD='lnivmgk9';
 const CLOUDINARY_PRESET='yousef_products';
-const MANAGER_EMAIL='yousefcreationz@gmail.com';
+const MANAGER_EMAILS=['yousefcreationz@gmail.com','wachaexperience@gmail.com'];
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:'select_account'});
 const money=n=>n==null?'Ask for price':`UGX ${Number(n).toLocaleString('en-UG')}`;
 const categories=['Polos','T-Shirts','Knitwear','Trousers','Shorts','Jerseys','Sandals','Underwear','Jewelry','Accessories','Styled Looks'];
 const blank={name:'',category:'Polos',price:'',desc:'',badge:'',photo:null};
+const isManager=email=>MANAGER_EMAILS.includes(email?.toLowerCase());
 
 export default function Admin(){
   const [user,setUser]=useState(null);
@@ -24,7 +25,7 @@ export default function Admin(){
   const [busy,setBusy]=useState(false);
 
   useEffect(()=>onAuthStateChanged(auth,async current=>{
-    if(current&&current.email?.toLowerCase()!==MANAGER_EMAIL){
+    if(current&&!isManager(current.email)){
       await signOut(auth);
       setStatus('This Google account is not authorised for Shop Manager.');
       setUser(null);
@@ -38,14 +39,14 @@ export default function Admin(){
     return onSnapshot(q,s=>setProducts(s.docs.map(d=>({id:d.id,...d.data()}))),e=>setStatus(`Could not load catalogue: ${e.message}`));
   },[user]);
 
-  const login=async e=>{e.preventDefault();setStatus('Signing in…');try{await signInWithEmailAndPassword(auth,email.trim(),password);setStatus('');}catch(err){setStatus(err.code==='auth/invalid-credential'?'Incorrect email or password.':err.message)}};
+  const login=async e=>{e.preventDefault();setStatus('Signing in…');try{const result=await signInWithEmailAndPassword(auth,email.trim(),password);if(!isManager(result.user.email)){await signOut(auth);setStatus('This account is not authorised for Shop Manager.');return;}setStatus('');}catch(err){setStatus(err.code==='auth/invalid-credential'?'Incorrect email or password.':err.message)}};
   const googleLogin=async()=>{
     setStatus('Opening Google sign in…');
     try{
       const result=await signInWithPopup(auth,googleProvider);
-      if(result.user.email?.toLowerCase()!==MANAGER_EMAIL){
+      if(!isManager(result.user.email)){
         await signOut(auth);
-        setStatus('Use the YousefCreationz Google account to sign in.');
+        setStatus('This Google account is not authorised for Shop Manager.');
         return;
       }
       setStatus('');
