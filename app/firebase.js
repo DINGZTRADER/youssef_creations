@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAoxh7Zhl7BX3NqRyWZDbsbRlcH4ZOgrI8',
-  authDomain: 'yousefcreationz-3bb6c.firebaseapp.com',
+  authDomain: 'yousefcreationz-3bb6c-19153.firebaseapp.com',
   projectId: 'yousefcreationz-3bb6c',
   messagingSenderId: '1043965118299',
   appId: '1:1043965118299:web:2b99324df183a68b3afc7e',
