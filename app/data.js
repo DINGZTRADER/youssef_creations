@@ -1,7 +1,7 @@
 export const STORE = {
   name: 'YousefCreationz',
-  whatsappDisplay: '0704 650 600',
-  whatsappIntl: '256704650600',
+  whatsappDisplay: '0758 704 993',
+  whatsappIntl: '256758704993',
   city: 'Kampala, Uganda',
   logo: '/api/product-image?id=logo'
 };
