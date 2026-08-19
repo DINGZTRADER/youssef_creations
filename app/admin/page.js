@@ -1,12 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { PRODUCTS, STORE } from '../data';
 
 const CLOUDINARY_CLOUD='lnivmgk9';
 const CLOUDINARY_PRESET='yousef_products';
+const MANAGER_EMAIL='yousefcreationz@gmail.com';
+const googleProvider=new GoogleAuthProvider();
+googleProvider.setCustomParameters({prompt:'select_account'});
 const money=n=>n==null?'Ask for price':`UGX ${Number(n).toLocaleString('en-UG')}`;
 const categories=['Polos','T-Shirts','Knitwear','Trousers','Shorts','Jerseys','Sandals','Underwear','Jewelry','Accessories','Styled Looks'];
 const blank={name:'',category:'Polos',price:'',desc:'',badge:'',photo:null};
@@ -20,7 +23,15 @@ export default function Admin(){
   const [status,setStatus]=useState('');
   const [busy,setBusy]=useState(false);
 
-  useEffect(()=>onAuthStateChanged(auth,setUser),[]);
+  useEffect(()=>onAuthStateChanged(auth,async current=>{
+    if(current&&current.email?.toLowerCase()!==MANAGER_EMAIL){
+      await signOut(auth);
+      setStatus('This Google account is not authorised for Shop Manager.');
+      setUser(null);
+      return;
+    }
+    setUser(current);
+  }),[]);
   useEffect(()=>{
     if(!user)return;
     const q=query(collection(db,'products'),orderBy('sortOrder','asc'));
@@ -28,6 +39,22 @@ export default function Admin(){
   },[user]);
 
   const login=async e=>{e.preventDefault();setStatus('Signing in…');try{await signInWithEmailAndPassword(auth,email.trim(),password);setStatus('');}catch(err){setStatus(err.code==='auth/invalid-credential'?'Incorrect email or password.':err.message)}};
+  const googleLogin=async()=>{
+    setStatus('Opening Google sign in…');
+    try{
+      const result=await signInWithPopup(auth,googleProvider);
+      if(result.user.email?.toLowerCase()!==MANAGER_EMAIL){
+        await signOut(auth);
+        setStatus('Use the YousefCreationz Google account to sign in.');
+        return;
+      }
+      setStatus('');
+    }catch(err){
+      if(err.code==='auth/popup-closed-by-user')setStatus('Google sign in was cancelled.');
+      else if(err.code==='auth/operation-not-allowed')setStatus('Google sign in is not enabled in Firebase yet.');
+      else setStatus(`Google sign in failed: ${err.message}`);
+    }
+  };
 
   const uploadToCloudinary=async file=>{
     const body=new FormData();
@@ -74,7 +101,7 @@ export default function Admin(){
   };
   const remove=async p=>{if(!confirm(`Delete ${p.name}?`))return;await deleteDoc(doc(db,'products',p.id));};
 
-  if(!user)return <main className="admin-shell"><header className="admin-head"><div><p className="eyebrow">YousefCreationz</p><h1>Shop Manager</h1><p>Upload products from your phone and publish them directly to the website.</p></div><a className="button button-dark" href="/">View shop</a></header><form className="admin-form" onSubmit={login} style={{maxWidth:520,marginTop:30}}><h2>Manager sign in</h2><label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="username"/></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/></label><button className="button button-dark">Sign in</button>{status&&<p className="saved">{status}</p>}</form></main>;
+  if(!user)return <main className="admin-shell"><header className="admin-head"><div><p className="eyebrow">YousefCreationz</p><h1>Shop Manager</h1><p>Upload products from your phone and publish them directly to the website.</p></div><a className="button button-dark" href="/">View shop</a></header><form className="admin-form" onSubmit={login} style={{maxWidth:520,marginTop:30}}><h2>Manager sign in</h2><button type="button" className="button button-outline" onClick={googleLogin} style={{width:'100%',marginBottom:16}}>Continue with Google</button><div style={{textAlign:'center',margin:'0 0 16px',opacity:.65}}>or use email and password</div><label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="username"/></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/></label><button className="button button-dark">Sign in</button>{status&&<p className="saved">{status}</p>}</form></main>;
 
   return <main className="admin-shell">
     <header className="admin-head"><div><p className="eyebrow">YousefCreationz</p><h1>Shop Manager</h1><p>Take or choose a photo, add the details and tap Publish. The product appears on the website for everyone.</p></div><div><a className="button button-outline" href="/">View shop</a> <button className="text-button" onClick={()=>signOut(auth)}>Sign out</button></div></header>
