@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { auth, db, storage } from '../firebase';
+import { auth, db } from '../firebase';
 import { PRODUCTS, STORE } from '../data';
 
+const CLOUDINARY_CLOUD='lnivmgk9';
+const CLOUDINARY_PRESET='yousef_products';
 const money=n=>n==null?'Ask for price':`UGX ${Number(n).toLocaleString('en-UG')}`;
 const categories=['Polos','T-Shirts','Knitwear','Trousers','Shorts','Jerseys','Sandals','Underwear','Jewelry','Accessories','Styled Looks'];
 const blank={name:'',category:'Polos',price:'',desc:'',badge:'',photo:null};
@@ -27,19 +28,27 @@ export default function Admin(){
   },[user]);
 
   const login=async e=>{e.preventDefault();setStatus('Signing in…');try{await signInWithEmailAndPassword(auth,email.trim(),password);setStatus('');}catch(err){setStatus(err.code==='auth/invalid-credential'?'Incorrect email or password.':err.message)}};
+
+  const uploadToCloudinary=async file=>{
+    const body=new FormData();
+    body.append('file',file);
+    body.append('upload_preset',CLOUDINARY_PRESET);
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body});
+    const data=await res.json();
+    if(!res.ok||!data.secure_url)throw new Error(data?.error?.message||'Cloudinary upload failed');
+    return data;
+  };
+
   const upload=async e=>{
     e.preventDefault();
     if(!form.name.trim()||!form.photo)return setStatus('Add a product name and photo.');
     setBusy(true);setStatus('Uploading photo…');
     try{
-      const safe=form.photo.name.replace(/[^a-zA-Z0-9._-]/g,'-');
-      const storagePath=`products/${Date.now()}-${safe}`;
-      const imageRef=ref(storage,storagePath);
-      await uploadBytes(imageRef,form.photo,{contentType:form.photo.type||'image/jpeg'});
-      const image=await getDownloadURL(imageRef);
+      const uploaded=await uploadToCloudinary(form.photo);
+      setStatus('Saving product…');
       const nextSort=(products.reduce((m,p)=>Math.max(m,Number(p.sortOrder)||0),0)||0)+1;
       await addDoc(collection(db,'products'),{
-        name:form.name.trim(),category:form.category,price:form.price===''?null:Number(form.price),desc:form.desc.trim(),badge:form.badge.trim(),image,storagePath,inStock:true,sortOrder:nextSort,createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+        name:form.name.trim(),category:form.category,price:form.price===''?null:Number(form.price),desc:form.desc.trim(),badge:form.badge.trim(),image:uploaded.secure_url,cloudinaryPublicId:uploaded.public_id,inStock:true,sortOrder:nextSort,createdAt:serverTimestamp(),updatedAt:serverTimestamp()
       });
       setForm(blank);const input=document.getElementById('product-photo');if(input)input.value='';setStatus('Published to the website.');setTimeout(()=>setStatus(''),2200);
     }catch(err){setStatus(`Upload failed: ${err.message}`)}finally{setBusy(false)}
@@ -63,7 +72,7 @@ export default function Admin(){
     const desc=prompt('Description',p.desc||'');if(desc===null)return;
     await updateDoc(doc(db,'products',p.id),{name:name.trim(),price:price.trim()===''?null:Number(price),desc:desc.trim(),updatedAt:serverTimestamp()});
   };
-  const remove=async p=>{if(!confirm(`Delete ${p.name}?`))return;await deleteDoc(doc(db,'products',p.id));if(p.storagePath){try{await deleteObject(ref(storage,p.storagePath))}catch{}}};
+  const remove=async p=>{if(!confirm(`Delete ${p.name}?`))return;await deleteDoc(doc(db,'products',p.id));};
 
   if(!user)return <main className="admin-shell"><header className="admin-head"><div><p className="eyebrow">YousefCreationz</p><h1>Shop Manager</h1><p>Upload products from your phone and publish them directly to the website.</p></div><a className="button button-dark" href="/">View shop</a></header><form className="admin-form" onSubmit={login} style={{maxWidth:520,marginTop:30}}><h2>Manager sign in</h2><label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="username"/></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required autoComplete="current-password"/></label><button className="button button-dark">Sign in</button>{status&&<p className="saved">{status}</p>}</form></main>;
 
