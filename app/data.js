@@ -3,27 +3,30 @@ export const STORE = {
   whatsappDisplay: '0704 650 600',
   whatsappIntl: '256704650600',
   city: 'Kampala, Uganda',
-  imageOrigin: ''
+  logo: 'https://drive.google.com/thumbnail?id=1uW6Xy4xR4LvlF0KDLEpLVnT2QGClUnAI&sz=w1000'
 };
 
+const driveImage = id => `https://drive.google.com/uc?export=view&id=${id}`;
+
 export const PRODUCTS = [
-  ['sky-linen-look','Sky Linen Look','Complete Looks',165000,'sky-linen-look.jpeg','Style edit'],
-  ['monochrome-knit','Monochrome Knit Set','Complete Looks',175000,'monochrome-knit.jpeg',''],
-  ['terracotta-set','Terracotta Weekend Set','Complete Looks',170000,'terracotta-set.jpeg',''],
-  ['sand-quarterzip','Sand Quarter-Zip Set','Complete Looks',185000,'sand-quarterzip.jpeg','New in'],
-  ['neutral-daywear','Neutral Daywear Set','Complete Looks',155000,'neutral-daywear.jpeg',''],
-  ['burgundy-set','Burgundy Resort Set','Complete Looks',165000,'burgundy-set.jpeg',''],
-  ['black-white','Black & White Occasion Set','Complete Looks',175000,'black-white.jpeg',''],
-  ['patterned-knit','Patterned Knit Set','Complete Looks',170000,'patterned-knit.jpeg',''],
-  ['amber-linen','Amber Linen Set','Complete Looks',160000,'amber-linen.jpeg',''],
-  ['black-joggers','Black Utility Jogger','Trousers',95000,'black-joggers.jpeg','Best seller'],
-  ['stone-cargo','Stone Cargo Jogger','Trousers',105000,'stone-cargo.jpeg',''],
-  ['navy-joggers','Navy Everyday Jogger','Trousers',90000,'navy-joggers.jpeg',''],
-  ['congo-jersey','Congo Heritage Jersey','Jerseys',85000,'congo-jersey.jpeg','Limited look'],
-  ['briefs-navy','Boxed Briefs — Navy Edit','Underwear',65000,'briefs-navy.jpeg',''],
-  ['briefs-blue','Boxed Briefs — Blue Edit','Underwear',65000,'briefs-blue.jpeg',''],
-  ['briefs-plum','Boxed Briefs — Plum Edit','Underwear',65000,'briefs-plum.jpeg',''],
-  ['briefs-teal','Boxed Briefs — Teal Edit','Underwear',65000,'briefs-teal.jpeg',''],
-  ['briefs-sand','Boxed Briefs — Sand Edit','Underwear',65000,'briefs-sand.jpeg',''],
-  ['briefs-green','Boxed Briefs — Green Edit','Underwear',65000,'briefs-green.jpeg','']
-].map(([id,name,category,price,image,badge])=>({id,name,category,price,image:`/api/product-image?file=${encodeURIComponent(image)}`,badge,inStock:true}));
+  {id:'classic-polos',name:'Classic Polo Shirts',category:'Polos',price:50000,image:driveImage('1HCB3D55HwiceTPe2i5c1dOOuShTTRIlZ'),badge:'New colours',desc:'Short-sleeve polo shirts in a wide range of colours. Confirm available size and colour before payment.'},
+  {id:'smart-polo',name:'Smart Casual Polo',category:'Polos',price:50000,image:driveImage('1c5kIJpqxfwQE-9i7tAc8ClnnIVo2zf88'),badge:'Fresh drop',desc:'Clean polo styling for everyday and smart-casual wear.'},
+  {id:'summer-polos',name:'Summer Colour Polo',category:'Polos',price:50000,image:driveImage('1sFD_Af4TzrwIGHqcJ3ug78ntZfYCc6ds'),badge:'',desc:'Bright seasonal polo colours for relaxed Kampala days.'},
+  {id:'everyday-tee',name:'Everyday T-Shirts',category:'T-Shirts',price:50000,image:driveImage('1_kuul9XwT1Q3QRdDyofyubfTD_XW2nn7'),badge:'UGX 50K',desc:'Easy everyday tees in multiple colours. Ask for current size and colour options.'},
+  {id:'linen-trousers',name:'Linen Drawstring Trousers',category:'Trousers',price:80000,image:driveImage('15S0nzHt8RVYgFwH4r1uwxVyt97KNcZUt'),badge:'UGX 80K',desc:'Lightweight linen-style drawstring trousers in neutral colours.'},
+  {id:'white-linen-look',name:'White Linen Trouser Look',category:'Trousers',price:80000,image:driveImage('1ir4pOaEm37EGQfGx5eFjCMdKopeG0rK3'),badge:'',desc:'White linen trouser shown styled with a navy polo and sandals. Price shown is for the trouser.'},
+  {id:'olive-linen-look',name:'Olive Linen Trouser Look',category:'Trousers',price:80000,image:driveImage('1M2OlKxCfv2XYe5RqYPOmOQGMPF2NCsAJ'),badge:'',desc:'Olive linen trouser styled with a white polo. Price shown is for the trouser.'},
+  {id:'tailored-shorts',name:'Tailored Casual Shorts',category:'Shorts',price:50000,image:driveImage('1OUkzXSMqa8loAqBL7_oOJOJXDh5uopBx'),badge:'UGX 50K',desc:'Casual shorts in versatile colours. Confirm size and exact colour on WhatsApp.'},
+  {id:'navy-shorts',name:'Navy Casual Shorts',category:'Shorts',price:50000,image:driveImage('1NXu6RW9QQNvvx5VnBT0hZaiXC54NTEpN'),badge:'',desc:'Navy shorts styled with a pink polo and sandals. Price shown is for the shorts.'},
+  {id:'sandals',name:'Men’s Sandals',category:'Sandals',price:150000,image:driveImage('1lEh5HeBiMlYRiOGOldIBThqty0WOytvj'),badge:'UGX 150K',desc:'Statement men’s sandals. Confirm current colours and sizes before payment.'},
+  {id:'cream-knit',name:'Textured Knit Polo',category:'Knitwear',price:null,image:driveImage('1HgFj9USSa5Sp5nIZsrMAPnF9XierFowx'),badge:'Ask price',desc:'Textured knit polo available in several stripe colourways.'},
+  {id:'button-knit',name:'Textured Button Knit',category:'Knitwear',price:null,image:driveImage('1eI_gg_MxyGloL_FP2_mjgjOnReX152Mf'),badge:'',desc:'Premium textured short-sleeve knit with contrast trim.'},
+  {id:'quarter-zip-knit',name:'Quarter-Zip Knit',category:'Knitwear',price:null,image:driveImage('1Doi8NKAzMVWBzi5CYZQQmc6S0h1oo0nZ'),badge:'',desc:'Smart quarter-zip knit tops in neutral and muted colours.'},
+  {id:'stripe-zip-knit',name:'Striped Zip Knit',category:'Knitwear',price:null,image:driveImage('158SOYMVl6DmaZRDg8z203ZO_4Zye2J6v'),badge:'',desc:'Striped zip-neck knit tops for smart casual styling.'},
+  {id:'orange-look',name:'Orange Polo Styled Look',category:'Styled Looks',price:null,image:driveImage('1qBgOurERYFPYLVLk7SSfyXJhumC8h3qz'),badge:'Shop the look',desc:'Orange polo, light trousers and sandals shown together. Ask WhatsApp for the price of each piece.'},
+  {id:'black-look',name:'Black Polo Styled Look',category:'Styled Looks',price:null,image:driveImage('1_-KiyNtgjAYbHA4kYvKHwbG06s3TlQsB'),badge:'',desc:'Black polo, grey shorts and sandals. Order pieces individually or ask for the complete look.'},
+  {id:'white-look',name:'White Polo Styled Look',category:'Styled Looks',price:null,image:driveImage('118bbF1HIDlpQExB-VjO56NQI8025Tmqm'),badge:'',desc:'White polo with dark trousers and sandals. Ask for current availability and item prices.'},
+  {id:'rust-look',name:'Rust Shirt Weekend Look',category:'Styled Looks',price:null,image:driveImage('1wmoIX03GNXxFPEpcTGndK172tHhrBQqa'),badge:'',desc:'A coordinated rust shirt, grey trouser and footwear look for smart weekends.'},
+  {id:'monochrome-look',name:'Monochrome Smart Look',category:'Styled Looks',price:null,image:driveImage('1KdTey4vLB8LmH2309cKf0v48giFjc-3z'),badge:'',desc:'Patterned shirt with black trousers and black footwear.'},
+  {id:'orange-smart-look',name:'Orange Polo Smart Look',category:'Styled Looks',price:null,image:driveImage('1ZwWIawoR0omW7YULb45O9H9BV_Xr8kq3'),badge:'',desc:'Orange polo paired with neutral trousers and loafers.'}
+].map(product=>({...product,inStock:true}));
