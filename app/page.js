@@ -1,20 +1,13 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
-import { PRODUCTS, STORE } from './data';
+import { useMemo, useState } from 'react';
+import { STORE } from './data';
+import { useLiveProducts } from './useLiveProducts';
 
 const money = n => n == null ? 'Ask for price' : `UGX ${Number(n).toLocaleString('en-UG')}`;
 const wa = text => `https://wa.me/${STORE.whatsappIntl}?text=${encodeURIComponent(text)}`;
 
-function useProducts(){
-  const [products,setProducts]=useState(PRODUCTS);
-  useEffect(()=>{
-    try { const saved=localStorage.getItem('yc-products'); if(saved) setProducts(JSON.parse(saved)); } catch{}
-  },[]);
-  return products.filter(p=>p.inStock!==false);
-}
-
 export default function Storefront(){
-  const products=useProducts();
+  const products=useLiveProducts();
   const [category,setCategory]=useState('All');
   const [query,setQuery]=useState('');
   const [selected,setSelected]=useState(null);
