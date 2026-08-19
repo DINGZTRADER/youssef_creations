@@ -3,7 +3,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isYousefManager() {
       return request.auth != null
-        && request.auth.token.email == 'yousefcreationz@gmail.com';
+        && request.auth.token.email in [
+          'yousefcreationz@gmail.com',
+          'wachaexperience@gmail.com'
+        ];
     }
 
     match /products/{productId} {
