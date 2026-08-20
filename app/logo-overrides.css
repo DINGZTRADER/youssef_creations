@@ -1,7 +1,7 @@
 .site-header{height:144px}
-.official-brand{position:relative!important;display:block!important;width:320px!important;height:129px!important;max-width:46vw!important;overflow:hidden!important;background:#fff!important;flex:0 0 auto!important}
-.official-brand .brand-logo{position:absolute!important;width:265%!important;max-width:none!important;height:auto!important;max-height:none!important;left:-70%!important;top:-174%!important;object-fit:initial!important;display:block!important}
+.official-brand{position:relative!important;display:block!important;width:320px!important;height:129px!important;max-width:46vw!important;overflow:hidden!important;background:#1010ed!important;flex:0 0 auto!important}
+.official-brand .brand-logo{position:absolute!important;width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;left:0!important;top:0!important;object-fit:contain!important;display:block!important}
 .footer-brand.official-brand{width:270px!important;height:109px!important;max-width:100%!important}
-.footer-brand.official-brand .footer-logo{width:265%!important;max-width:none!important;max-height:none!important;left:-70%!important;top:-174%!important;height:auto!important}
+.footer-brand.official-brand .footer-logo{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;left:0!important;top:0!important;object-fit:contain!important}
 @media(max-width:900px){.site-header{height:112px}.official-brand{width:240px!important;height:97px!important;max-width:54vw!important}.footer-brand.official-brand{width:240px!important;height:97px!important}}
 @media(max-width:520px){.site-header{height:98px;padding-left:12px!important;padding-right:12px!important}.official-brand{width:210px!important;height:85px!important;max-width:58vw!important}.footer-brand.official-brand{width:230px!important;height:93px!important;max-width:76vw!important}}
