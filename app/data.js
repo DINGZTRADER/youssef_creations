@@ -3,7 +3,7 @@ export const STORE = {
   whatsappDisplay: '0758 704 993',
   whatsappIntl: '256758704993',
   city: 'Kampala, Uganda',
-  logo: '/yousef-logo-reversed.png'
+  logo: '/yousef-logo-reversed-v3.png'
 };
 
 const driveImage = id => `/api/product-image?id=${encodeURIComponent(id)}`;
